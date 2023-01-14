@@ -1,0 +1,124 @@
+package window;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+
+import Db.DbManager;
+import base.comp.BaseFrame;
+import window.Table.showTable;
+
+public class MainFrame extends BaseFrame {
+
+	private JPanel jpTop;
+	private JPanel jpTeast;
+	private JPanel jpCenter;
+	private JPanel jpBottom;
+
+	private JButton jbLogin;
+	private JButton jbJoin;
+
+	private JTable table;
+
+	private JLabel jlGhas;
+	private JLabel jlLogpls;
+	private JScrollPane scroll;
+	private Panel jpTwest;
+	private DbManager db;
+	private Vector<Vector<Object>> data;
+
+	public MainFrame() {
+		// TODO Auto-generated constructor stub
+		db = new DbManager();
+		super.setFrame("4501", 500, 600);
+	}
+
+	public void setComp() {
+		// TODO Auto-generated method stub
+		jpTop = new JPanel();
+		jpTeast = new JPanel(new GridLayout(2, 1, 10, 10));
+		jpTwest = new Panel();
+		jpCenter = new JPanel();
+		jpBottom = new JPanel();
+
+		jbLogin = new JButton("로그인");
+		jbJoin = new JButton("회원가입");
+
+		jlGhas = new JLabel("GHAS게시판");
+		jlLogpls = new JLabel("로그인 하세요");
+
+		Vector<String> cols = new Vector<>();
+		cols.add("번호");
+		cols.add("닉네임");
+		cols.add("제목");
+		cols.add("내용");
+		cols.add("날짜");
+
+		data = db.getData("SELECT * FROM `4501`.list;");
+		DefaultTableModel dtm = new DefaultTableModel(data, cols);
+
+		table = new JTable(dtm);
+		scroll = new JScrollPane(table);
+
+	}
+
+	public void setDesign() {
+
+		jpTwest.setPreferredSize(new Dimension(370, 70));
+		jlGhas.setFont(new Font(" ", Font.CENTER_BASELINE, 50));
+
+		jpTeast.add(jbLogin);
+		jpTeast.add(jbJoin);
+		jpTwest.add(jlGhas);
+		jpTop.add(jpTwest, BorderLayout.WEST);
+		jpTop.add(jpTeast, BorderLayout.EAST);
+
+		jpCenter.add(jlLogpls);
+
+		jpBottom.add(scroll);
+
+		super.add(jpTop, BorderLayout.NORTH);
+		super.add(jpCenter, BorderLayout.CENTER);
+		super.add(jpBottom, BorderLayout.SOUTH);
+	}
+
+	public void events() {
+		// TODO Auto-generated method stub
+		// 테이블 이벤트
+
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+				new showTable();
+				
+			}
+
+		});
+
+		jbLogin.addActionListener(e -> {
+			new LoginFrame();
+			dispose();
+		});
+
+		jbJoin.addActionListener(e -> {
+			new joinFrame();
+		});
+	}
+
+}

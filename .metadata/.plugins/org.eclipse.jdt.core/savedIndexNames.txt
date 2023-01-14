@@ -1,0 +1,5 @@
+INDEX VERSION 1.131+C:\Users\stutu\eclipse-Task\.metadata\.plugins\org.eclipse.jdt.core
+1865797976.index
+3441119577.index
+4223680675.index
+3903892371.index
