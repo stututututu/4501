@@ -100,6 +100,7 @@ public class JoinFrame extends BaseFrame {
 
 			
 			userData = db.getData("SELECT * FROM `4501`.`member` where `id` = ?;", id);
+//			nickData = db.getData("SELECT * FROM `4501`.`member` where `id` = ?;", id);
 			
 //			if (userData.size() != 0) {
 //				System.out.println("아이디 중복");
@@ -117,7 +118,8 @@ public class JoinFrame extends BaseFrame {
 //			}
 			if (userData.size() != 0) {
 				System.out.println("아이디 중복");
-					
+				jtId.setText("");
+				jtId.requestFocus();
 					
 				super.dispose();
 				return;

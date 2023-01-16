@@ -19,7 +19,7 @@ import base.comp.BaseFrame;
  * @author KJW
  *
  */
-public class showTable extends BaseFrame {
+public class showTableFrame extends BaseFrame {
 
 	private JTextField jtName;
 	private JTextField jtDate;
@@ -35,7 +35,7 @@ public class showTable extends BaseFrame {
 
 
 
-	public showTable(Vector<Object> list) {
+	public showTableFrame(Vector<Object> list) {
 		this.list = list;
 		super.setFrame("Wirting", 500, 420);
 

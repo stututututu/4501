@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
 
 import Db.DbManager;
 import base.comp.BaseFrame;
-import window.Table.showTable;
+import window.Table.showTableFrame;
 
 public class MainFrame extends BaseFrame {
 
@@ -107,15 +107,17 @@ public class MainFrame extends BaseFrame {
 //		String num = String.valueOf(i);
 
 		table.addMouseListener(new MouseAdapter() {
-;
 
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				// System.out.println(table.getSelectedRow());
+				if(MemberModel.loginMemeber != null) {
+					int seletRow = table.getSelectedRow();
+					Vector<Object> list = data.get(seletRow);
+					new showTableFrame(list);
+					
+				}
 
-				int seletRow = table.getSelectedRow();
-				Vector<Object> list = data.get(seletRow);
-				new showTable(list);
 
 			}
 
@@ -131,21 +133,39 @@ public class MainFrame extends BaseFrame {
 //			}
 //			
 //			logRefresh();
-//			
-			if(jbLogin.getText().equals("로그인"))
-				new LoginFrame(jbLogin);
-			else {
-				System.out.println("로그아웃기능 실행");
-				jbLogin.setText("로그인");
-			}
+////			
+//			if(jbLogin.getText().equals("로그인"))
+//				new LoginFrame(this);
+//			else {
+//				System.out.println("로그아웃기능 실행");
+//				jbLogin.setText("로그인");
+//			}
 			
 //			dispose();
+			
+			validate();
+			repaint();
 		});
 
 		jbJoin.addActionListener(e -> {
 			new JoinFrame();
 			dispose();
 		});
+		
+		jbLogout.addActionListener(e -> {
+			logout();
+		});
+	}
+	
+	public void login() {
+		// TODO Auto-generated method stub
+		// 
+	}
+	
+	public void logout() {
+		// TODO Auto-generated method stub
+		// f
+
 	}
 
 	public void tableRefresh() {

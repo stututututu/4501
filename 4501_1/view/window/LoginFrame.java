@@ -32,6 +32,7 @@ public class LoginFrame extends BaseFrame {
 	private Vector<Vector<Object>> dataPw;
 	private String pw;
 	private JButton jbMainLogin;
+	private MainFrame mainFrame;
 
 	public LoginFrame() {
 		// TODO Auto-generated constructor stub
@@ -46,6 +47,13 @@ public class LoginFrame extends BaseFrame {
 		
 		super.setFrame("loginFrame", 300, 160);
 		
+	}
+
+	public LoginFrame(MainFrame mainFrame) {
+		// TODO Auto-generated constructor stub
+		this.mainFrame = mainFrame;
+		
+		super.setFrame("loginFrame", 300, 160);
 	}
 
 	@Override
@@ -142,7 +150,16 @@ public class LoginFrame extends BaseFrame {
 				System.out.println("로그인 할 수 없습니다.");
 				return;				
 			}
-			jbMainLogin.setText("로그아웃");
+//			jbMainLogin.setText("로그아웃");
+			mainFrame.login();
+			
+			MemberModel.loginMember = data.get(0);
+			
+//			MemberModel.no = data.get(0).get(1);
+//			MemberModel.id = data.get(0).get(3);
+//			MemberModel.name = data.get(0).get(2);
+//			MemberModel.pw = data.get(0).get(0);
+//			
 //			new LogMainFrame();
 			dispose();
 		});
