@@ -7,34 +7,50 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Base.Comp.BaseFrame;
+import Db.DbManager;
 
 public class WritingFrame extends BaseFrame{
 
 	private JButton jbClose;
 	private JButton jbSave;
+	private JTextField jtContents;
+	private JTextField jtTitle;
+	private JTextField jtdate;
+	private JTextField jtName;
+	private String title;
+	private String contents;
+	private DbManager db;
+	private MainFrame mainFrame;
 
-	public WritingFrame() {
+	public WritingFrame(MainFrame mainFrame) {
 		// TODO Auto-generated constructor stub
+		this.mainFrame = mainFrame;
 		super.SetFrame("writing", 400, 500);
+		db = new DbManager();
 	}
 
 	public void setComp() {
 		// TODO Auto-generated method stub
 		jbClose = new JButton("닫기");
 		jbSave = new JButton("저장");
+		jtName = new JTextField();
+		jtdate= new JTextField();
+		jtTitle = new JTextField();
+		jtContents = new JTextField();
+		
 
 	}
 
 	@Override
 	public void setDesign() {
 		// TODO Auto-generated method stub
-		jpTop.setGrid(1, 3, 10, 10).add(new JTextField());
+		jpTop.setGrid(1, 3, 10, 10).add(jtName);
 		jpTop.add(new JPanel());
-		jpTop.add(new JTextField());
+		jpTop.add(jtdate);
 
 		jpCenter.addCild();
-		jpCenter.jpTop.add(new JTextField());
-		jpCenter.jpCenter.add(new JTextField());
+		jpCenter.jpTop.add(jtTitle);
+		jpCenter.jpCenter.add(jtContents);
 		
 		jpBottom.setFlow().add(jbSave);
 		jpBottom.add(jbClose);
@@ -47,8 +63,18 @@ public class WritingFrame extends BaseFrame{
 
 	@Override
 	public void events() {
-		// TODO Auto-generated method stub
-
+		title = jtTitle.getText();
+		contents = jtContents.getText();
+ 
+		jbSave.addActionListener(e -> {
+			db.setData("INSERT INTO `4501`.`list` (`title`, `contents`) VALUES (?, ?);", title, contents);
+			System.out.println("write succeed");
+			mainFrame.tableRefresh();
+		});
+		
+		jbClose.addActionListener(e -> {
+			dispose();
+		});
 	}
 
 }

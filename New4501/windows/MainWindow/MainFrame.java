@@ -13,9 +13,11 @@ import javax.swing.table.DefaultTableModel;
 import Base.Comp.BaseFrame;
 import Base.Comp.BasePanel;
 import Db.DbManager;
+import model.UserModel;
 
 public class MainFrame extends BaseFrame {
 
+	boolean logstate;
 	private JLabel jlLogin;
 	private JButton jbLogin;
 	private JButton jbJoin;
@@ -28,6 +30,7 @@ public class MainFrame extends BaseFrame {
 	private JTable jTable;
 	private JScrollPane jsp;
 	private BasePanel jpLogout;
+	private Vector<Vector<String>> userData;
 
 	public MainFrame() {
 		db = new DbManager();
@@ -43,23 +46,25 @@ public class MainFrame extends BaseFrame {
 		jbJoin = new JButton("회원가입");
 		jbLogout = new JButton("로그아웃");
 		jbWrite = new JButton("글쓰기");
-	
+
 		jpLogin = new BasePanel().setGrid(2, 1);
 		jpLogout = new BasePanel().setGrid(2, 1);
-		
+
 		Vector<String> cols = new Vector<String>();
 		cols.add("번호");
 		cols.add("닉네임");
 		cols.add("제목");
 		cols.add("내용");
 		cols.add("날씨");
-		
+
 		data = db.getData("select * from list");
-		
+
 		dtm = new DefaultTableModel(data, cols);
 		jTable = new JTable(dtm);
 		jsp = new JScrollPane(jTable);
 		
+		userData = db.getData("select * from member");
+
 	}
 
 	@Override
@@ -68,7 +73,7 @@ public class MainFrame extends BaseFrame {
 		super.jpTop.addCild();
 		super.jpTop.jpCenter.add(new JLabel("GHAS 게시판"));
 		super.jpTop.jpBottom.add(jlLogin);
-	
+
 		jpLogout.add(jbLogin);
 		jpLogout.add(jbJoin);
 
@@ -76,32 +81,42 @@ public class MainFrame extends BaseFrame {
 		jpLogin.add(jbWrite);
 
 		logout();
-		
+
 		super.jpTop.jpBottom.add(jlLogin);
-		
+
 		super.jpCenter.add(jsp);
-		
-		
+
 	}
 
 	@Override
 	public void events() {
 		// TODO Auto-generated method stub
 		jTable.addMouseListener(new MouseAdapter() {
+
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
+				int selectRow = jTable.getSelectedRow();
+				Vector<String> list = data.get(selectRow);
+				Vector<String> user = userData.get(selectRow);
+				
 				super.mouseClicked(e);
-//				new ShowFrame();
-//				new WritingFrame();
-				new UpdateFrame();
+				if (UserModel.logstate) {
+					new UpdateFrame(list, user);
+					tableRefresh();
+					return;
+				}
+
+				new ShowFrame(list, user);
+				tableRefresh();
 			}
 		});
-		
+
 		jbLogin.addActionListener(e -> {
-			new LoginFrame();
+			new LoginFrame(this);
 		});
-		
+
 		jbJoin.addActionListener(e -> {
 			new SigninFrame();
 		});
@@ -110,19 +125,16 @@ public class MainFrame extends BaseFrame {
 			logout();
 		});
 		jbWrite.addActionListener(e -> {
-//			new WritingFrame();
+			new WritingFrame(this);
 		});
-		
-		
-		
+
 	}
 
 	private void logout() {
 		// TODO Auto-generated method stub
 		super.jpTop.jpRight.removeAll();
 		super.jpTop.jpRight.add(jpLogout);
-		
-		
+
 		super.reFresh();
 	}
 
@@ -130,11 +142,16 @@ public class MainFrame extends BaseFrame {
 		// TODO Auto-generated method stub
 		super.jpTop.jpRight.removeAll();
 		super.jpTop.jpRight.add(jpLogin);
-		
+
 		super.reFresh();
 	}
-}
+	public void tableRefresh() {
 
+		dtm.getDataVector().clear();
+		dtm.getDataVector().addAll(db.getData("SELECT * FROM `4501`.list;"));
+
+	}
+}
 
 // 1. 중간중간 최소 뭔가 쓰면 계속 테스트 해본다.
 //		-> 내가 원하는 대로 나오는지.
